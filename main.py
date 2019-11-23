@@ -1,24 +1,36 @@
 # [START gae_python37_app]
-import datetime
-from flask import Flask, jsonify
+import secrets
+import config
+from flask import Flask, jsonify, request
 from flask_restplus import Api
 from google.cloud import datastore
 from routes import time_api
-import settings
-import secrets
 
-# If no entrypiont in app.yaml this file will be run with app
+# If no entrypoint in app.yaml this file will be run with app
+
+
 def init_app_settings():
-    secret = settings.get_jwt_secret()
+    secret = config.get_jwt_secret()
     if (secret):
-        app.config['SECRET'] = settings.get_jwt_secret()
+        app.config['SECRET'] = config.get_jwt_secret()
     else:
-        secret = settings.generate_jwt_secret()
-        settings.store_secret_in_datastore(secret)
+        secret = config.generate_jwt_secret()
+        config.store_secret_in_datastore(secret)
         app.config['SECRET'] = secret
 
+
 app = Flask(__name__)
-api = Api(app=app)
+
+authorizations = {
+    'basicAuth': {
+        'type': 'basic',
+        'in': 'header',
+        'name': 'Authorization'
+    }
+}
+
+# api = Api(app=app)
+api = Api(app=app, authorizations=authorizations, security='Basic Auth')
 init_app_settings()
 
 api.add_resource(time_api.TimeApi, '/api/time')
