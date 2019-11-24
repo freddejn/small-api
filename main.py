@@ -1,10 +1,11 @@
 # [START gae_python37_app]
 import secrets
 import config
-from flask import Flask, jsonify, request
+from flask import Flask
 from flask_restplus import Api
 from google.cloud import datastore
 from routes import time_api
+from models.authorization import authorize_decorator
 
 # If no entrypoint in app.yaml this file will be run with app
 
@@ -29,8 +30,8 @@ authorizations = {
     }
 }
 
-# api = Api(app=app)
-api = Api(app=app, authorizations=authorizations, security='Basic Auth')
+api = Api(app=app, authorizations=authorizations,
+          security='Basic Auth', decorators=[authorize_decorator])
 init_app_settings()
 
 api.add_resource(time_api.TimeApi, '/api/time')
