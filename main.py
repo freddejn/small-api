@@ -1,11 +1,14 @@
 # [START gae_python37_app]
 import secrets
-import config
+
 from flask import Flask
 from flask_restplus import Api
 from google.cloud import datastore
-from routes import time_api
+
+import config
 from models.authorization import authorize_decorator
+from routes import blueprint as api
+from routes import time_api
 
 # If no entrypoint in app.yaml this file will be run with app
 
@@ -21,20 +24,8 @@ def init_app_settings():
 
 
 app = Flask(__name__)
-
-authorizations = {
-    'basicAuth': {
-        'type': 'basic',
-        'in': 'header',
-        'name': 'Authorization'
-    }
-}
-
-api = Api(app=app, authorizations=authorizations,
-          security='Basic Auth', decorators=[authorize_decorator])
 init_app_settings()
-
-api.add_resource(time_api.TimeApi, '/api/time')
+app.register_blueprint(api, url_prefix='/api/1')
 
 if __name__ == '__main__':
     # Only for local runs
