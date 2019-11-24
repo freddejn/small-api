@@ -1,5 +1,5 @@
 from flask_restplus import Api
-from .time_api import api as time_namespace
+from apis.time_api import api as time_api
 from flask import Blueprint
 
 # api = Api(title='API for all sorts of things', version='1.0', endpoint='api')
@@ -13,4 +13,4 @@ authorizations = {
 
 blueprint = Blueprint('api', __name__)
 api = Api(blueprint, authorizations=authorizations, security='basicAuth')
-api.add_namespace(time_namespace)
+api.add_namespace(time_api)

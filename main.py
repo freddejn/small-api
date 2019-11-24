@@ -7,8 +7,7 @@ from google.cloud import datastore
 
 import config
 from models.authorization import authorize_decorator
-from routes import blueprint as api
-from routes import time_api
+from apis import blueprint
 
 # If no entrypoint in app.yaml this file will be run with app
 
@@ -25,7 +24,7 @@ def init_app_settings():
 
 app = Flask(__name__)
 init_app_settings()
-app.register_blueprint(api, url_prefix='/api/1')
+app.register_blueprint(blueprint, url_prefix='/api/1')
 
 if __name__ == '__main__':
     # Only for local runs
