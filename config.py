@@ -14,7 +14,6 @@ def generate_jwt_secret():
 def get_jwt_secret():
     client, kind = get_secret_client()
     key = client.key(kind, Config.JWT_ID)
-    ds_secret = datastore.Entity(key=key)
     return client.get(key=key)
 
 
@@ -33,3 +32,12 @@ def get_secret_client():
     client = datastore.Client()
     kind = 'Secret'
     return (client, kind)
+
+def init_app_settings(app):
+    secret = get_jwt_secret()
+    if (secret):
+        app.config['SECRET'] = get_jwt_secret()
+    else:
+        secret = generate_jwt_secret()
+        store_secret_in_datastore(secret)
+        app.config['SECRET'] = secret

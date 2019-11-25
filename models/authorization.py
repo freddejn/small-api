@@ -3,17 +3,6 @@ from functools import wraps
 from google.cloud import datastore
 import datetime
 
-
-def password_correct(username, password):
-    if not username:
-        return False
-    user = get_user(username)
-    if not user:
-        return False
-    stored_password = user['password']
-    return (stored_password == password)
-
-
 def authorize_decorator(func):
     @wraps(func)
     def authorize(*args, **kwargs):
@@ -25,6 +14,16 @@ def authorize_decorator(func):
             })
         return func(*args, **kwargs)
     return authorize
+
+
+def password_correct(username, password):
+    if not username:
+        return False
+    user = get_user(username)
+    if not user:
+        return False
+    stored_password = user['password']
+    return (stored_password == password)
 
 
 def get_user(username):
