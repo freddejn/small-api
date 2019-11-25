@@ -13,6 +13,7 @@ authorizations = {
 }
 
 blueprint = Blueprint('api', __name__)
-api = Api(blueprint, authorizations=authorizations, security='basicAuth')
+api = Api(blueprint, title='API for all sorts of things', version='1.0',
+          endpoint='api', authorizations=authorizations, security='basicAuth')
 api.add_namespace(time_api)
 api.add_namespace(qr_code_api)

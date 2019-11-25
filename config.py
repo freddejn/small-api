@@ -33,6 +33,7 @@ def get_secret_client():
     kind = 'Secret'
     return (client, kind)
 
+
 def init_app_settings(app):
     secret = get_jwt_secret()
     if (secret):

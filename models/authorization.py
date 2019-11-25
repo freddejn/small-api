@@ -3,6 +3,7 @@ from functools import wraps
 from google.cloud import datastore
 import datetime
 
+
 def authorize_decorator(func):
     @wraps(func)
     def authorize(*args, **kwargs):

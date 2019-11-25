@@ -1,9 +1,6 @@
 import qrcode
 import qrcode.image.svg
 import io
-import base64
-import json
-from flask import request, make_response, send_file, jsonify, Response
 from flask_restplus import Namespace, Resource, fields, reqparse, marshal
 
 from models.authorization import authorize_decorator

@@ -1,6 +1,4 @@
 import datetime
-
-from flask import jsonify, request
 from flask_restplus import Namespace, Resource, fields
 
 from models.authorization import authorize_decorator

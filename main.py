@@ -1,11 +1,6 @@
 # [START gae_python37_app]
-import secrets
-
 from flask import Flask
-from flask_restplus import Api
-from google.cloud import datastore
 
-from models.authorization import authorize_decorator
 from apis import blueprint
 
 # If no entrypoint in app.yaml this file will be run with app
