@@ -1,6 +1,6 @@
 # [START gae_python37_app]
 from flask import Flask
-from config import Config
+from instance.config import Config
 
 from apis import blueprint
 
