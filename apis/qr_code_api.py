@@ -5,9 +5,11 @@ from flask_restplus import Namespace, Resource, fields, reqparse, marshal
 
 from models.authorization import authorize_decorator
 
-api = Namespace('QR', descriptor='QR-code api.')
+api = Namespace('QR', description='QR-code api.')
 request_parser = reqparse.RequestParser()
-request_parser.add_argument('values', action='append')
+request_parser.add_argument(
+    'values', type=fields.String(description='A list of values to be converted into QR-codes'), action='append',
+    location='values')
 
 qr_code_object = api.model(name='qr-code-object', model={
     'value': fields.String,

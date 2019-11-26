@@ -27,3 +27,4 @@ credentials.dat
 .DS_store
 env/
 .kokoro
+instance/

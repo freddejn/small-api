@@ -1,11 +1,13 @@
 # [START gae_python37_app]
 from flask import Flask
+from config import Config
 
 from apis import blueprint
 
 # If no entrypoint in app.yaml this file will be run with app
 app = Flask(__name__)
 app.register_blueprint(blueprint, url_prefix='/api/1')
+app.config.from_object(Config)
 
 if __name__ == '__main__':
     # Only for local runs
