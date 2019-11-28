@@ -15,4 +15,6 @@ if __name__ == '__main__':
     # Only for local runs
     app.run(host='127.0.0.1', port=8080, debug=True)
     app.testing = True
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 # [END gae_python37_app]

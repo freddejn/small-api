@@ -1,3 +1,35 @@
 body {
-    color:red;
+    background-color: rgb(50,54,57);
+    font-family:'Noto Sans', sans-serif;
+    color:rgb(243,237,237);
 }
+
+/* unvisited link */
+a:link {
+    color: red;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: green;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: hotpink;
+  }
+  
+  /* selected link */
+  a:active {
+    color: blue;
+  }
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+.center{
+    width:800px;
+    text-align: center;
+}
+
