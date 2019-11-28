@@ -2,12 +2,14 @@
 from flask import Flask
 from instance.config import Config
 
-from apis import blueprint
+from apis import blueprint as blueprint_api
+from webapp.startpage.index import blueprint as blueprint_index
 
 # If no entrypoint in app.yaml this file will be run with app
 app = Flask(__name__)
-app.register_blueprint(blueprint, url_prefix='/api/1')
 app.config.from_object(Config)
+app.register_blueprint(blueprint_api, url_prefix=app.config['API_ENDPOINT'])
+app.register_blueprint(blueprint_index, url_prefix='/')
 
 if __name__ == '__main__':
     # Only for local runs
