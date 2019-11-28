@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, fields, Resource
 from flask import current_app
-from mailjet_rest import Client as mail_client
+# from mailjet_rest import Client as mail_client
 import requests
 
 from models.authorization import authorize_decorator

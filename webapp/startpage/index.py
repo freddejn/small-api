@@ -4,7 +4,9 @@ import os
 
 current_file_path = os.path.dirname(os.path.abspath(__file__))
 blueprint = Blueprint('index',
-                      __name__, static_folder='../static',
+                      __name__,
+                      static_url_path='/',
+                      static_folder='../static',
                       template_folder='../templates')
 
 
