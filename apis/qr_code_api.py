@@ -8,7 +8,7 @@ from models.authorization import authorize_decorator
 api = Namespace('QR', description='QR-code api.')
 request_parser = reqparse.RequestParser()
 request_parser.add_argument(
-    'values', type=fields.String(description='A list of values to be converted into QR-codes'), action='append',
+    'values', type=fields.String, action='append',
     location='values')
 
 qr_code_object = api.model(name='qr-code-object', model={
@@ -26,7 +26,7 @@ class QRApi(Resource):
 
     @api.expect(request_parser)
     @api.marshal_with(qr_code_response)
-    def get(self):
+    def post(self):
         factory = qrcode.image.svg.SvgImage
         QR_codes = []
         args = request_parser.parse_args()
