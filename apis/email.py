@@ -1,5 +1,5 @@
 from flask_restplus import Namespace, fields, Resource
-from flask import current_app, jsonify
+from flask import current_app
 import requests
 # from mailjet_rest import Client as mail_client
 
@@ -8,9 +8,12 @@ from models.authorization import authorize_decorator
 api = Namespace('email', description='Send email')
 
 request_parser = api.model(name='Email', model={
-    'to': fields.String(required=True, description='Whom to send the email to.'),
-    'subject': fields.String(required=False, description='The subject field.'),
-    'text': fields.String(required=True, description='The message text.'),
+    'to': fields.String(required=True,
+                        description='Whom to send the email to.'),
+    'subject': fields.String(required=False,
+                             description='The subject field.'),
+    'text': fields.String(required=True,
+                          description='The message text.'),
 })
 
 

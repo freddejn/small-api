@@ -1,8 +1,7 @@
 import qrcode
 import qrcode.image.svg
 import io
-from flask_restplus import Namespace, Resource, reqparse, marshal, fields
-from flask import make_response, jsonify
+from flask_restplus import Namespace, Resource, fields
 
 from models.authorization import authorize_decorator
 
