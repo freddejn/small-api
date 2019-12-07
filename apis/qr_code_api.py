@@ -28,7 +28,6 @@ class QRApi(Resource):
         factory = qrcode.image.svg.SvgImage
         QR_codes = []
         text_values = api.payload
-        print(text_values)
 
         for qr_code in text_values:
             qr_code_image = qrcode.make(

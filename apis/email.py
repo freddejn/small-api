@@ -1,5 +1,5 @@
 from flask_restplus import Namespace, fields, Resource
-from flask import current_app
+from flask import current_app, jsonify
 import requests
 # from mailjet_rest import Client as mail_client
 
@@ -21,11 +21,12 @@ class EmailApi(Resource):
     def post(self):
         config = current_app.config
         email_data = api.payload
-        requests.post(
+        response = requests.post(
             config['EMAIL_API_URL'],
             auth=('api', config['EMAIL_API_KEY']),
             data={'from': f'{config["FULL_EMAIL"]}',
                   'to': [f'{email_data["to"]}'],
                   'subject': f'{email_data["subject"]}',
                   'text': f'{email_data["text"]}'})
-        return {'success': True}
+        print(response.json())
+        return response.json()
