@@ -1,7 +1,7 @@
 from flask_restplus import Namespace, fields, Resource
 from flask import current_app
-# from mailjet_rest import Client as mail_client
 import requests
+# from mailjet_rest import Client as mail_client
 
 from models.authorization import authorize_decorator
 
@@ -19,9 +19,13 @@ class EmailApi(Resource):
     method_decorators = [authorize_decorator]
     @api.expect(request_parser, validate=True)
     def post(self):
-        # config = current_app.config
-        print(api.payload)  # This is a dict
-        # result = mailjet.send.create(data=email_data)
-        # print(result.status_code)
-        # print(result.json())
+        config = current_app.config
+        email_data = api.payload
+        requests.post(
+            config['EMAIL_API_URL'],
+            auth=('api', config['EMAIL_API_KEY']),
+            data={'from': f'{config["FULL_EMAIL"]}',
+                  'to': [f'{email_data["to"]}'],
+                  'subject': f'{email_data["subject"]}',
+                  'text': f'{email_data["text"]}'})
         return {'success': True}

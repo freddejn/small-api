@@ -30,13 +30,14 @@ class QRApi(Resource):
         text_values = api.payload
         print(text_values)
 
-        for value in text_values:
-            qr_code_image = qrcode.make(value, image_factory=factory)
+        for qr_code in text_values:
+            qr_code_image = qrcode.make(
+                qr_code['value'], image_factory=factory)
             bytes_file = io.BytesIO()
             qr_code_image.save(bytes_file)
             bytes_file.seek(0)
             byte_str = bytes_file.read()
             str_svg = byte_str.decode('utf-8')
-            QR_codes.append({'value': value, 'qr_code': str_svg})
-        # response = {'qr_codes': QR_codes}
+            qr_code['qr_code'] = str_svg
+            QR_codes.append(qr_code)
         return QR_codes
