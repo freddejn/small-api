@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, current_app, request
-from posixpath import join as urljoin
 import os
 
-current_file_path = os.path.dirname(os.path.abspath(__file__))
+# current_file_path = os.path.dirname(os.path.abspath(__file__))
 blueprint = Blueprint('index',
                       __name__,
                       static_url_path='/',

@@ -9,12 +9,10 @@ api = Namespace('QR', description='QR-code api.')
 
 
 qr_code_object = api.model(name='qr-code-object', model={
-    'value': fields.String,
-    'qr_code': fields.String,
+    'value': fields.String(
+        description='QR-code will be created from this value.'),
+    'qr_code': fields.String(description='SVG QR-code as a string.'),
 })
-# qr_code_response = api.model(name='qr-code-array', model={
-#     'qr_codes': fields.List(fields.Nested(qr_code_object)),
-# })
 
 
 @api.route('')

@@ -9,11 +9,9 @@ api = Namespace('email', description='Send email')
 
 request_parser = api.model(name='Email', model={
     'to': fields.String(required=True,
-                        description='Whom to send the email to.'),
-    'subject': fields.String(required=False,
-                             description='The subject field.'),
-    'text': fields.String(required=True,
-                          description='The message text.'),
+                        description='Reciever.'),
+    'subject': fields.String(required=False),
+    'text': fields.String(required=True),
 })
 
 
