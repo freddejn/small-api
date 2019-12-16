@@ -8,9 +8,9 @@ from models.authorization import authorize_decorator
 api = Namespace('QR', description='QR-code api.')
 
 
-qr_code_object = api.model(name='qr-code-object', model={
+qr_code_object = api.model(name='QR-code', model={
     'value': fields.String(
-        description='QR-code will be created from this value.'),
+        description='QR-code will be created from this value, link, value etc.'),
     'qr_code': fields.String(description='SVG QR-code as a string.'),
 })
 
