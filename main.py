@@ -1,4 +1,5 @@
 # [START gae_python37_app]
+# If no entrypoint in app.yaml this file will be run with app
 from flask import Flask
 from instance.config import Config
 
@@ -6,7 +7,7 @@ from apis import blueprint as blueprint_api
 from apis import api as restplus_api
 from webapp.startpage.index import blueprint as blueprint_index
 
-# If no entrypoint in app.yaml this file will be run with app
+
 app = Flask(__name__)
 app.config.from_object(Config)
 restplus_api.title = app.config['API_MANPAGE_TITLE']

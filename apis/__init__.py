@@ -21,4 +21,3 @@ api.add_namespace(time_api)
 api.add_namespace(qr_code_api)
 api.add_namespace(email_api)
 api.add_namespace(note_api)
-

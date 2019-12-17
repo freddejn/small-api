@@ -1,6 +1,8 @@
-import datetime
+from datetime import datetime
+from flask import jsonify
 from flask_restplus import Namespace, Resource, fields
 from google.cloud import datastore
+from models.formatters import DatetimeFormatter as dtf
 
 from models.authorization import authorize_decorator
 
@@ -8,7 +10,6 @@ api = Namespace('note', description='Note api')
 
 
 note = api.model(name='note', model={
-    'created_date': fields.DateTime(dt_format='iso8601'),
     'body': fields.String(description='The note body.'),
     'title': fields.String(description='The title of the note'),
     'keywords': fields.List(fields.String('Keyword')),
@@ -24,20 +25,18 @@ def store_notes(json_notes):
         key = client.key('notes')
         note = datastore.Entity(key)
         if not json_note['created_date']:
-            json_note['created_date'] = datetime.datetime.now().isoformat()
+            json_note['created_date'] = datetime.now().isoformat()
         note.update(json_note)
         notes.append(note)
     client.put_multi(notes)
 
 
 def get_notes():
-    notes_list = []
     client = datastore.Client()
     query = client.query(kind='notes')
-    notes = query.fetch()
-    for note in notes:
-        notes_list.append(note)
-    return notes_list
+    query.order = ['created_date']
+    notes = query.fetch(limit=20)
+    return list(notes)
 
 
 @api.route('')
@@ -47,11 +46,10 @@ class Note(Resource):
     @api.response(200, 'Success', [note])
     def post(self):
         notes = api.payload
-        for note in notes:
-            store_notes(note)
-        print(notes)
+        store_notes(notes)
         return notes
 
     @api.response(200, 'Success', [note])
     def get(self):
-        return get_notes()
+        notes = get_notes()
+        return notes
