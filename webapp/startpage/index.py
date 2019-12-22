@@ -19,3 +19,7 @@ def index():
         'full_endpoint': api_full_link
     }
     return render_template('index.html', title='Home', data=data)
+
+@blueprint.route('/trivia', methods=['GET'])
+def trivia():
+    return render_template('trivia.html', title='Trivia')

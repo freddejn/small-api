@@ -1,8 +1,6 @@
 from datetime import datetime
-from flask import jsonify
 from flask_restplus import Namespace, Resource, fields
 from google.cloud import datastore
-from models.formatters import DatetimeFormatter as dtf
 
 from models.authorization import authorize_decorator
 
