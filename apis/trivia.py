@@ -61,14 +61,17 @@ class TriviaList(Resource):
         return trivia
 
 
-@api.route('/<int:id>')
-@api.param('id', 'The game id')
+@api.route('/<int:trivia_id>')
+@api.param('trivia_id', 'The game id')
 class Trivia(Resource):
     method_decorators = [authorize_decorator]
     @api.response(200, 'Success', trivia)
-    def get(self, id):
-        print(id)
-        return get_trivia(id)
+    def get(self, trivia_id):
+        trivia = get_trivia(trivia_id)
+        if trivia:
+            return {'id': trivia.id}
+        else:
+            return {}, 404
 
 
 @api.route('/<int:trivia_id>/player')

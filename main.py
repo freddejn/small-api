@@ -6,18 +6,21 @@ from instance.config import Config
 from apis import blueprint as blueprint_api
 from apis import api as restplus_api
 from webapp.startpage.index import blueprint as blueprint_webapp
+from webapp.trivia.trivia import blueprint as blueprint_trivia
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='webapp/static')
 app.config.from_object(Config)
 restplus_api.title = app.config['API_MANPAGE_TITLE']
-app.register_blueprint(blueprint_api, url_prefix=app.config['API_ENDPOINT'])
+app.register_blueprint(blueprint_api, url_prefix='/api/1')
 app.register_blueprint(blueprint_webapp, url_prefix='')
+app.register_blueprint(blueprint_trivia, url_prefix='/trivia')
 
 if __name__ == '__main__':
     # Only for local runs
     app.run(host='127.0.0.1', port=8080, debug=True)
     app.testing = True
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+    app.config['SERVER_NAME'] = 'http://localhost:8080'
 
 # [END gae_python37_app]
