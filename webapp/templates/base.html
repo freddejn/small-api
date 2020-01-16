@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% block header %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,9 @@
     <link rel="stylesheet", type="text/css", href="/static/css/style.css"></link>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
 </head>
+{% endblock %}
 <body>
     {% block content %}{% endblock %}
+    {% block footer %}{% endblock %}
 </body>
 </html>

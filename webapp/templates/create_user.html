@@ -6,9 +6,10 @@
         <h1>Test Left</h1>
     </div>
     <div class="middlepane">
-        <form action="{{url_for('trivia.play_trivia', trivia_id=data['trivia_id'])}}">
+        <form action="{{url_for('trivia.create_user')}}">
             <label>Username</label>
             <input type="text" name="username"></input>
+            <input type="hidden" name="trivia_id" value="{{ data['trivia_id'] }}"></input>
             <button type="submit">Create</button>
         </form>
     </div>

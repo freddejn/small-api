@@ -1,0 +1,7 @@
+.score-table {
+    display: table;
+}
+.score-table tr:hover {
+    background-color: aliceblue;
+    color: black;
+}

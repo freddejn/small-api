@@ -33,6 +33,13 @@ a:link {
     text-align: center;
 }
 
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: left;
+}
 
 .container {
   width: 100%;
@@ -40,11 +47,13 @@ a:link {
 }
 
 .leftpane {
+    padding-left: 4px;
     width: 25%;
     height: 100%;
     float: left;
     background-color: rosybrown;
     border-collapse: collapse;
+    text-align: left;
 }
 
 .middlepane {
@@ -53,13 +62,24 @@ a:link {
     float: left;
     background-color: royalblue;
     border-collapse: collapse;
+    text-align: center;
 }
 
 .rightpane {
+  padding-right: 4px;
   width: 25%;
   height: 100%;
   position: relative;
   float: right;
   background-color: yellow;
   border-collapse: collapse;
+  text-align: right;
+}
+
+.wordwrap { 
+  white-space: pre-wrap;      /* CSS3 */   
+  white-space: -moz-pre-wrap; /* Firefox */    
+  white-space: -pre-wrap;     /* Opera <7 */   
+  white-space: -o-pre-wrap;   /* Opera 7 */    
+  word-wrap: break-word;      /* IE */
 }

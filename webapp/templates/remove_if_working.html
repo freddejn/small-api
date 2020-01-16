@@ -1,0 +1,31 @@
+{%  extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="leftpane">
+        <h1>Players</h1>
+        <table>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+            {% for player in data['trivia']['players']%}
+            <tr>
+                <td>{{ player['name'] }}</td><td>{{ player['score']|default(0, true) }} </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="middlepane">
+        {% if data.page == 'startpage' %}
+        <a href="{{data.url}}/start">
+            <button>Start</button>
+        </a>
+        {% else %}
+        <p>Game id: {{data['trivia_id']}}</p>
+        {% endif %}
+    </div>
+    <div class="rightpane">
+        <h1>Test Right</h1>
+    </div>
+</div>
+{% endblock %}

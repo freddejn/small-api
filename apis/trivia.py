@@ -33,6 +33,8 @@ def join(trivia_key, player):
     client = datastore.Client()
     key = client.key('Trivia', trivia_key)
     trivia = client.get(key)
+    if trivia is None:
+        return {}, 404
     if 'players' in trivia:
         if name_taken(player, trivia):
             return "Name already exists in game", 409
@@ -54,7 +56,6 @@ trivia = api.model(name='trivia', model={
 
 @api.route('')
 class TriviaList(Resource):
-    method_decorators = [authorize_decorator]
     @api.response(200, 'Success', trivia)
     def post(self):
         trivia = store_trivia()
@@ -64,19 +65,17 @@ class TriviaList(Resource):
 @api.route('/<int:trivia_id>')
 @api.param('trivia_id', 'The game id')
 class Trivia(Resource):
-    method_decorators = [authorize_decorator]
     @api.response(200, 'Success', trivia)
     def get(self, trivia_id):
         trivia = get_trivia(trivia_id)
-        if trivia:
-            return {'id': trivia.id}
+        if trivia is not None:
+            return {'id': trivia.id, 'players': trivia.get('players')}
         else:
             return {}, 404
 
 
 @api.route('/<int:trivia_id>/player')
 class TriviaJoin(Resource):
-    method_decorators = [authorize_decorator]
     @api.expect(player_create)
     @api.response(200, 'Success')
     def post(self, trivia_id):
