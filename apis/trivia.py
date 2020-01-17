@@ -1,8 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
 from google.cloud import datastore
 
-from models.authorization import authorize_decorator
-
 api = Namespace('trivia', description='Trivia api')
 
 

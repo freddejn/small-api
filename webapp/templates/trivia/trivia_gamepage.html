@@ -1,0 +1,35 @@
+{%  extends "base.html" %}
+{% block header %}
+{{super()}}
+<link rel="stylesheet" , type="text/css" , href="/static/css/trivia/trivia.css">
+</link>
+{% endblock %}
+{% block content %}
+<div class="grid">
+    <div class="row">
+        <div class="col-25 align-left">
+            <table class="score-table">
+                <tr>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+                {% for player in data['trivia']['players']%}
+                <tr>
+                    <td align="left">{{ player['name'] }}</td>
+                    <td align="right">{{ player['score']|default(0, true) }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-50 align-center">
+            <p>Game id: {{data['trivia_id']}}</p>
+        </div>
+        <div class="col-25 align-right">
+            <p>Test Right</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+{{ super() }}
+{% endblock %}

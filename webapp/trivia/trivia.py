@@ -31,7 +31,7 @@ def add_user_to_trivia(trivia_id, username):
 @blueprint.route('', methods=['GET'])
 def new_trivia():
     data = {'page': 'startpage', 'url': request.path}
-    return render_template('trivia.html', title='Trivia', data=data)
+    return render_template('trivia/trivia_base.html', title='Trivia', data=data)
 
 
 @blueprint.route('/start', methods=['GET'])
@@ -44,7 +44,7 @@ def start_trivia():
 @blueprint.route('/<int:trivia_id>', methods=['GET'])
 def play_trivia(trivia_id):
     trivia = get_trivia(trivia_id)
-    data = {'page': 'trivia', 'trivia_id': trivia_id}
+    data = {'page': 'gamepage', 'trivia_id': trivia_id}
     username = request.args.get('username')
     data['username'] = username
     data['trivia'] = trivia
@@ -52,7 +52,7 @@ def play_trivia(trivia_id):
         return redirect(url_for('trivia.new_trivia'))
     if not username:
         return redirect(url_for('trivia.create_user', trivia_id=trivia_id))
-    return render_template('trivia/trivia.html', title='Trivia', data=data)
+    return render_template('trivia/trivia_base.html', title='Trivia', data=data)
 
 
 @blueprint.route('/create_user', methods=['GET'])
@@ -60,8 +60,9 @@ def create_user():
     data = {}
     username = request.args.get('username')
     data['trivia_id'] = request.args.get('trivia_id')
+    data['page'] = 'create'
     if not username:
-        return render_template('create_user.html', data=data)
+        return render_template('trivia/trivia_base.html', data=data)
     response = add_user_to_trivia(
         username=username,
         trivia_id=data['trivia_id'])

@@ -1,7 +1,10 @@
 .score-table {
     display: table;
+    padding-left: 20px;
+    padding-top: 20px;
 }
 .score-table tr:hover {
     background-color: aliceblue;
     color: black;
 }
+

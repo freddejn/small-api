@@ -1,0 +1,22 @@
+{%  extends "base.html" %}
+{% block header %}
+{{super()}}
+<link rel="stylesheet" , type="text/css" , href="/static/css/trivia/trivia.css">
+</link>
+{% endblock %}
+{% block content %}
+<div class="grid">
+    <div class="row">
+        {% if data['page'] == 'gamepage' %}
+            {%include 'trivia/trivia_gamepage.html' %}
+        {% elif data['page'] == 'startpage' %}
+            {%include 'trivia/trivia_startpage.html' %}
+        {% else %}
+            {%include 'trivia/trivia_create_player.html' %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+{{ super() }}
+{% endblock %}
