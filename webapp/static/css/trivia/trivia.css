@@ -21,10 +21,6 @@
     padding-top: 40px;
 }
 
-.answer-correct {
+.answer-correct:hover {
     background-color: green;
-}
-
-.answer-incorrect {
-    background-color: red;
 }
