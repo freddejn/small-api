@@ -76,7 +76,6 @@ a:link {
   .col-33{ width: 100%;    }
 }
 
-
 .col-33 {
   width: 33.3%
 }
@@ -86,6 +85,10 @@ a:link {
 
 .col-50 {
   width: 50%;
+}
+
+.col-66 {
+  width: 66.7%;
 }
 
 .wordwrap { 

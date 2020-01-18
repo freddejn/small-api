@@ -1,12 +1,14 @@
 from models.authorization import authorize_decorator
 import requests
+import base64
 from flask import Blueprint, render_template,\
-    request, redirect, url_for
+    request, redirect, url_for, make_response
 
 blueprint = Blueprint('trivia',
                       __name__,
                       template_folder='../templates'
                       )
+current_question = {}
 
 
 def get_trivia(trivia_id):
@@ -70,3 +72,27 @@ def create_user():
         return redirect(url_for('trivia.play_trivia',
                                 trivia_id=data['trivia_id'],
                                 username=username))
+
+
+@blueprint.route('/new_question/<int:trivia_id>', methods=['GET'])
+def new_question(trivia_id):
+    response = requests.get('https://opentdb.com/api.php?amount=1')
+    data = response.json()
+    question = data['results'][0]['question']
+    current_question[trivia_id] = {'hash': base64.b64encode(question.encode('utf-8')).decode('utf-8'),
+                                   'question': data}
+    return data
+
+
+@blueprint.route('/get_updates/<int:trivia_id>', methods=['GET'])
+def get_updates(trivia_id):
+    question_hash = request.args.get('question')
+    existing_question = current_question.get(trivia_id)
+    if existing_question is None:
+        return make_response({}, 304)
+    if question_hash == existing_question.get('hash'):
+        return make_response({}, 304)
+    else:
+        if existing_question.get('question'):
+            return existing_question.get('question')
+        return make_response({}, 304)

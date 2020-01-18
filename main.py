@@ -18,7 +18,7 @@ app.register_blueprint(blueprint_trivia, url_prefix='/trivia')
 
 if __name__ == '__main__':
     # Only for local runs
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True, threaded=True)
     app.testing = True
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     app.config['SERVER_NAME'] = 'http://localhost:8080'
