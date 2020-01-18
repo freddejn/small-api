@@ -33,7 +33,8 @@ def add_user_to_trivia(trivia_id, username):
 @blueprint.route('', methods=['GET'])
 def new_trivia():
     data = {'page': 'startpage', 'url': request.path}
-    return render_template('trivia/trivia_base.html', title='Trivia', data=data)
+    return render_template('trivia/trivia_base.html',
+                           title='Trivia', data=data)
 
 
 @blueprint.route('/start', methods=['GET'])
@@ -54,7 +55,8 @@ def play_trivia(trivia_id):
         return redirect(url_for('trivia.new_trivia'))
     if not username:
         return redirect(url_for('trivia.create_user', trivia_id=trivia_id))
-    return render_template('trivia/trivia_base.html', title='Trivia', data=data)
+    return render_template('trivia/trivia_base.html', title='Trivia',
+                           data=data)
 
 
 @blueprint.route('/create_user', methods=['GET'])
@@ -79,8 +81,9 @@ def new_question(trivia_id):
     response = requests.get('https://opentdb.com/api.php?amount=1')
     data = response.json()
     question = data['results'][0]['question']
-    current_question[trivia_id] = {'hash': base64.b64encode(question.encode('utf-8')).decode('utf-8'),
-                                   'question': data}
+    current_question[trivia_id] = {
+        'hash': base64.b64encode(question.encode('utf-8')).decode('utf-8'),
+        'question': data}
     return data
 
 
