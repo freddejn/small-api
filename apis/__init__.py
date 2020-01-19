@@ -3,7 +3,7 @@ from apis.time_api import api as time_api
 from apis.qr_code_api import api as qr_code_api
 from apis.email import api as email_api
 from apis.note_api import api as note_api
-from apis.habit_api import api as habit_api
+from apis.habits_api import api as habits_api
 from flask import Blueprint
 
 # api = Api(title='API for all sorts of things', version='1.0', endpoint='api')
@@ -22,4 +22,4 @@ api.add_namespace(time_api)
 api.add_namespace(qr_code_api)
 api.add_namespace(email_api)
 api.add_namespace(note_api)
-api.add_namespace(habit_api)
+api.add_namespace(habits_api)
