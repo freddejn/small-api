@@ -1,0 +1,16 @@
+.completed-input {
+    width: 4em;
+}
+
+.completed-label {
+    width: 4em;
+}
+
+#habits-table {
+    margin: auto;
+    border: 3px solid rgb(212, 134, 82);
+}
+
+.ui.fluid.inverted.transparent.input {
+    min-width: 50 px;
+}

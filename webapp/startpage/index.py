@@ -21,5 +21,4 @@ def index():
         'endpoint': current_app.config['API_ENDPOINT'],
         'full_endpoint': this_path(current_app, request)
     }
-    print(data)
     return render_template('index.html', title='Home', data=data)

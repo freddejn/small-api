@@ -6,6 +6,7 @@ from instance.config import Config
 from apis import blueprint as blueprint_api
 from apis import api as restplus_api
 from webapp.startpage.index import blueprint as blueprint_webapp
+from webapp.habits.habits import blueprint as blueprint_habits
 
 
 app = Flask(__name__, static_url_path='/static', static_folder='webapp/static')
@@ -13,6 +14,7 @@ app.config.from_object(Config)
 restplus_api.title = app.config['API_MANPAGE_TITLE']
 app.register_blueprint(blueprint_api, url_prefix='/api/1')
 app.register_blueprint(blueprint_webapp, url_prefix='')
+app.register_blueprint(blueprint_habits, url_prefix='/habits')
 
 if __name__ == '__main__':
     # Only for local runs

@@ -14,63 +14,9 @@ habit = api.model(name='habit', model={
     'key': fields.String('Entity key')
 })
 
-
-# def store_habit(habit):
-#     client = datastore.Client()
-#     text = habit['body']
-#     habit_key = client.key('habit', str(
-#         base64.b64encode(text.encode('utf-8')), 'utf-8'))
-#     habit_entity = datastore.Entity(habit_key)
-#     habit_entity.update(habit)
-#     client.put(habit_entity)
-#     return {'id': habit_entity.key.id}
-
-
-# def get_habits(limit=20):
-#     habits_list = []
-#     client = datastore.Client()
-#     query = client.query(kind='habit')
-#     habits = query.fetch(limit=limit)
-#     for habit in habits:
-#         habit['id'] = habit.key.id_or_name
-#         habits_list.append(habit)
-#     return habits_list
-
-
-# def get_habit(id):
-#     client = datastore.Client()
-#     key = client.key('habit', id)
-#     habit = client.get(key)
-#     habit['id'] = key.id
-#     return habit
-
-
-# def delete_habit(id):
-#     client = datastore.Client()
-#     key = client.key('habit', id)
-#     client.delete(key)
-#     return {'success': True}
-
-
-# def get_habit_keys_only():
-#     client = datastore.Client()
-#     query = client.query(kind='habit')
-#     query.keys_only()
-#     res = query.fetch()
-#     return res
-
-
-# def get_habit_keys():
-#     habits = get_habit_keys_only()
-#     return [ent.key.id_or_name for ent in habits]
-
-
-# def delete_all_habits():
-#     habits = get_habit_keys_only()
-#     habit_keys = [ent.key for ent in habits]
-#     client = datastore.Client()
-#     client.delete_multi(habit_keys)
-#     return {'success': True}
+# completed_habits = api.model(name='completed-habits', model={
+#     'habit_key': fields.String('Habit key')
+# })
 
 
 @api.route('')
@@ -94,11 +40,12 @@ class Habit(Resource):
         return res
 
 
-@api.route('/<int:id>')
+@api.route('/<string:id>')
 class OneHabit(Resource):
     method_decorators = [authorize_decorator]
 
     def get(self, id):
+        print('running')
         habit = hm.get_habit(id)
         if habit is None:
             return {}, 404
@@ -116,3 +63,14 @@ class GetHabitKeys(Resource):
     def get(self):
         keys = hm.get_habit_keys()
         return keys
+
+
+@api.route('/complete/<string:id>')
+class CompleteHabit(Resource):
+    method_decorators = [authorize_decorator]
+
+    # @api.expect(completed_habits, validate=False)
+    # @api.response(200, 'Success', habit)
+    def post(self, id):
+        res = hm.complete_habit(id)
+        return res, 200

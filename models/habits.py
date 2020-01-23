@@ -1,4 +1,5 @@
 from google.cloud import datastore
+import datetime
 import base64
 
 
@@ -12,7 +13,7 @@ class HabitModel():
         habit_entity = datastore.Entity(habit_key)
         habit_entity.update(habit)
         client.put(habit_entity)
-        return {'id': habit_entity.key.id}
+        return {'id': habit_entity.key.to_legacy_urlsafe().decode('utf-8')}
 
     def get_habits(self, limit=20):
         habits_list = []
@@ -20,20 +21,22 @@ class HabitModel():
         query = client.query(kind='habit')
         habits = query.fetch(limit=limit)
         for habit in habits:
-            habit['id'] = habit.key.id_or_name
+            habit['id'] = habit.key.to_legacy_urlsafe().decode('utf-8')
             habits_list.append(habit)
         return habits_list
 
     def get_habit(self, id):
         client = datastore.Client()
-        key = client.key('habit', id)
+        key = datastore.Key.from_legacy_urlsafe(id)
         habit = client.get(key)
-        habit['id'] = key.id
-        return habit
+        if habit:
+            habit['id'] = habit.key.to_legacy_urlsafe().decode('utf-8')
+            return habit
+        return None
 
     def delete_habit(self, id):
         client = datastore.Client()
-        key = client.key('habit', id)
+        key = datastore.Key.from_legacy_urlsafe(id)
         client.delete(key)
         return {'success': True}
 
@@ -46,7 +49,7 @@ class HabitModel():
 
     def get_habit_keys(self):
         habits = self.get_habit_keys_only()
-        return [ent.key.id_or_name for ent in habits]
+        return [ent.key.to_legacy_urlsafe().decode('utf-8') for ent in habits]
 
     def delete_all_habits(self):
         habits = self.get_habit_keys_only()
@@ -54,3 +57,14 @@ class HabitModel():
         client = datastore.Client()
         client.delete_multi(habit_keys)
         return {'success': True}
+
+    def complete_habit(self, id):
+        client = datastore.Client()
+        date = datetime.date.today()
+        parent_key = datastore.Key.from_legacy_urlsafe(id)
+        key = client.key('completed_habit',
+                         date.isoformat(), parent=parent_key)
+        completed_habit = datastore.Entity(key)
+        completed_habit['datetime'] = datetime.datetime.utcnow()
+        res = client.put(completed_habit)
+        return res

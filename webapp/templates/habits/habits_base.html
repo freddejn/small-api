@@ -1,0 +1,11 @@
+{%  extends "base.html" %}
+{% block header %}
+{{super()}}
+<link rel="stylesheet", type="text/css", href="/static/css/habits/habits.css"></link>
+{% endblock %}
+{% block content %}
+{%include 'habits/habits_startpage.html' %}
+{% endblock %}
+{% block footer %}
+{{ super() }}
+{% endblock %}

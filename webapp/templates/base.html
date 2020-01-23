@@ -7,17 +7,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Small-Api</title>
-    <link rel="stylesheet" , type="text/css" , href="/static/css/style.css">
-    </link>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+    <script src="/static/js/jquery/jquery.js"></script>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/semantic.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/input.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/container.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/label.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/sticky.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/grid.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/transition.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/table.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/segment.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/button.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/semantic/icon.css"></link>
+    <link rel="stylesheet", type="text/css", href="/static/css/style.css"></link>
+    <link rel='icon' href='/static/images/favicon.png' type='image/x-icon'/ >
 </head>
 {% endblock %}
 
 <body>
     {% block content %}{% endblock %}
     {% block footer %}
-    <div class="footer">Footer</div>
+    <footer>
+        <div class="ui container">
+            Footer
+        </div>
+    </footer>
     {% endblock %}
+    <script src="/static/js/semantic/semantic.js"></script>
+    <script src="/static/js/semantic/sticky.js"></script>
 </body>
 
 </html>

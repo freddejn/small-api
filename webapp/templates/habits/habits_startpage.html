@@ -1,0 +1,97 @@
+<div class="ui hidden section divider"></div>
+
+<div class="ui stackable three column grid">
+    <div class="four wide column">
+    </div>
+    <div class="ui eight wide column">
+        <table id="habits-table"
+            class="ui unstackable selectable basic inverted collapsing celled padded table manual-center">
+            <thead>
+                <tr>
+                    <th class="four wide">Habit</th>
+                    <th class="one wide">Mon</th>
+                    <th class="one wide">Tue</th>
+                    <th class="one wide">Wen</th>
+                    <th class="one wide">Thu</th>
+                    <th class="one wide">Fri</th>
+                    <th class="one wide">Sat</th>
+                    <th class="one wide">Sun</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for habit in data['habits'] %}
+                <tr>
+                    <td data-label="habit">{{habit['body']}}</td>
+                    <td data-label="Mon">
+                        <button class="ui icon button">
+                            <i class="check icon">
+                            </i>
+                        </button>
+                    </td>
+                    <td data-label="Tue">
+                        <button class="ui icon button">
+                            <i class="check icon">
+                            </i>
+                        </button>
+                    </td>
+                    <td data-label="Wen">
+                        <button class="ui icon button">
+                            <i class="check icon">
+                            </i>
+                        </button>
+                    </td>
+                    <td data-label="Thu">
+                        <button class="ui icon button">
+                            <i class="check icon">
+                            </i>
+                        </button>
+                    </td>
+                    <td data-label="Fri">
+                        <button class="ui icon inverted button">
+                            <i class="check circle icon">
+                            </i>
+                        </button>
+                    </td>
+                    <td data-label="Sat">
+                        <button class="ui icon button">
+                            <i class="check icon">
+                            </i>
+                        </button>
+                    </td>
+                    <td data-label="Sun">
+                        <button class="ui icon button">
+                            <i class="check icon">
+                            </i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="four wide column">
+    </div>
+</div>
+
+<!-- <script type='text/javascript'>
+    function getDay() {
+        var now = new Date();
+        return now.getDay();
+    };
+
+    var numDays = 7
+    var now = new Date();
+    var table = document.getElementById("habits-table");
+
+    for (var i = 1, row; row = table.rows[i]; i++) {
+        var td = row.cells;
+        for (var j = 1, col; col = row.cells[j]; j++) {
+            if (j != getDay()) {
+                col.className = "disabled";
+                col.getElementsByTagName('div')[0].classList.add("disabled");
+            }else {
+                console.log(typeof(col));
+            };
+        };
+    };
+</script> -->
