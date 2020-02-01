@@ -8,21 +8,24 @@ chm = CompletedHabitModel()
 api = Namespace('habits', description='Habit api')
 
 
-habit = api.model(name='habit', model={
-    'id': fields.String('Entity id'),
-    'body': fields.String(description='The habit text.'),
+habit = api.model('habit', {
+    'body': fields.String('The habit text.'),
     'keywords': fields.List(fields.String('Keyword')),
     'repetition': fields.Integer('Weekly repetition goal, e.g 1, 7')
 })
 
-completed_habit = api.model(name='completed_habit', model={
-    'id': fields.Date(description='The date of completion'),
-    'habit_id': fields.String(description='Id of corresponding habit.'),
-    'timestamp': fields.DateTime(descripion='Datetime of update in database')
+habit_response = api.inherit('habit_response', habit, {
+    'id': fields.String('Habit id')
 })
 
-deleted = api.model(name='deleted', model={
-    'timestamp': fields.DateTime(descripion='Datetime of update in database')
+completed_habit = api.model('completed_habit', {
+    'id': fields.Date(description='The date of completion'),
+    'habit_id': fields.String('Id of corresponding habit.'),
+    'timestamp': fields.DateTime('Datetime of update in database')
+})
+
+deleted = api.model('deleted', {
+    'timestamp': fields.DateTime('Datetime of update in database')
 })
 
 
@@ -30,13 +33,13 @@ deleted = api.model(name='deleted', model={
 class Habit(Resource):
     method_decorators = [authorize_decorator]
     @api.expect(habit, validate=False)
-    @api.response(200, 'Success', habit)
+    @api.response(200, 'Success', habit_response)
     def post(self):
         habit = api.payload
         habit = hm.store_habit(habit)
         return habit
 
-    @api.response(200, 'Success', [habit])
+    @api.response(200, 'Success', [habit_response])
     def get(self):
         habits = hm.get_habits()
         return habits
@@ -58,7 +61,8 @@ class OneHabit(Resource):
         return result
 
 
-@api.route('/<string:habit_id>/completed', doc={'habit_id': 'The id of the corresponding habit.'})
+@api.route('/<string:habit_id>/completed',
+           doc={'habit_id': 'The id of the corresponding habit.'})
 class CompleteHabits(Resource):
     method_decorators = [authorize_decorator]
 
