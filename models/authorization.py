@@ -1,7 +1,7 @@
 from flask import request, make_response
 from functools import wraps
-from google.cloud import datastore
-import datetime
+from google.cloud import firestore
+import google.cloud.exceptions
 
 
 def authorize_decorator(func):
@@ -28,19 +28,20 @@ def password_correct(username, password):
 
 
 def get_user(username):
-    client = datastore.Client()
-    kind = 'User'
-    key = client.key(kind, username)
-    user = client.get(key)
-    return user
+    db = firestore.Client()
+    users = db.collection(u'users').document(u'{}'.format(username))
+    try:
+        user = users.get()
+        return user.to_dict()
+    except google.cloud.exceptions.NotFound:
+        return None
 
 
 def log_failed_attempt(request):
-    client = datastore.Client()
-    key = client.key('FailedLogin')
-    log_entry = datastore.Entity(key)
-    log_entry['datetime'] = datetime.datetime.now()
-    log_entry['authorization'] = str(request.authorization)
-    log_entry['headers'] = str(request.headers)
-    log_entry['remote_addr'] = str(request.remote_addr)
-    client.put(log_entry)
+    db = firestore.Client()
+    failedAttempt = {u'date_time': firestore.SERVER_TIMESTAMP,
+                     u'authorization': str(request.authorization),
+                     u'headers': str(request.headers),
+                     u'remote_addr': str(request.remote_addr)
+                     }
+    db.collection(u'failedLogins').add(failedAttempt)
