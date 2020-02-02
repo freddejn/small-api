@@ -14,3 +14,22 @@
 .ui.fluid.inverted.transparent.input {
     min-width: 50 px;
 }
+
+.ui.center.aligned.two.wide.computer.four.wide.mobile.column {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.ui.button[id^="day-button"]{
+    margin-top: 4px;
+    margin-bottom: 4px;
+    box-shadow: 2px 2px;
+}
+
+#delete-button-column {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#current-day {
+}

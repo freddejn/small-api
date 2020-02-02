@@ -1,77 +1,42 @@
 <div class="ui hidden section divider"></div>
 
-<div class="ui stackable three column grid">
-    <div class="four wide column">
+<div class="ui text container">
+    {% for habit in data['habits'] %}
+    <div class="ui horizontal section divider">{{habit['body']}}</div>
+    <div class="ui center aligned divided grid">
+        <div class="row">
+            <div id="current-day" class="ui middle aligned centered two wide computer four wide mobile column">
+                <button id="day-button-mon" class="ui focus tiny circular button">Mon</button>
+            </div>
+            <div class="ui middle aligned two wide computer four wide mobile column">
+                <button id="day-button-tues" class="ui tiny circular button">Tue</button>
+            </div>
+            <div class="ui middle aligned two wide computer four wide mobile column">
+                <button id="day-button-wen" class="ui tiny circular button">Wen</button>
+            </div>
+            <div class="ui middle aligned two wide computer four wide mobile column">
+                <button id="day-button-thu" class="ui tiny circular button">Thu</button>
+            </div>
+            <div class="ui middle aligned two wide computer four wide mobile column">
+                <button id="day-button-fir" class="ui tiny circular button">Fri</button>
+            </div>
+            <div class="ui middle aligned two wide computer four wide mobile column">
+                <button id="day-button-sat" class="ui tiny circular button">Sat</button>
+            </div>
+            <div class="ui middle aligned two wide computer four wide mobile column">
+                <button id="day-button-sun" class="ui tiny circular button">Sun</button>
+            </div>
+            <div class="ui middle aligned fluid two wide computer eight wide mobile column" id="delete-button-column">
+                <button class="ui small circular inverted red icon button" id="delete-button">
+                    <i class="x icon"></i>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="ui eight wide column">
-        <table id="habits-table"
-            class="ui unstackable selectable basic inverted collapsing celled padded table manual-center">
-            <thead>
-                <tr>
-                    <th class="four wide">Habit</th>
-                    <th class="one wide">Mon</th>
-                    <th class="one wide">Tue</th>
-                    <th class="one wide">Wen</th>
-                    <th class="one wide">Thu</th>
-                    <th class="one wide">Fri</th>
-                    <th class="one wide">Sat</th>
-                    <th class="one wide">Sun</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for habit in data['habits'] %}
-                <tr>
-                    <td data-label="habit">{{habit['body']}}</td>
-                    <td data-label="Mon">
-                        <button class="ui icon button">
-                            <i class="check icon">
-                            </i>
-                        </button>
-                    </td>
-                    <td data-label="Tue">
-                        <button class="ui icon button">
-                            <i class="check icon">
-                            </i>
-                        </button>
-                    </td>
-                    <td data-label="Wen">
-                        <button class="ui icon button">
-                            <i class="check icon">
-                            </i>
-                        </button>
-                    </td>
-                    <td data-label="Thu">
-                        <button class="ui icon button">
-                            <i class="check icon">
-                            </i>
-                        </button>
-                    </td>
-                    <td data-label="Fri">
-                        <button class="ui icon inverted button">
-                            <i class="check circle icon">
-                            </i>
-                        </button>
-                    </td>
-                    <td data-label="Sat">
-                        <button class="ui icon button">
-                            <i class="check icon">
-                            </i>
-                        </button>
-                    </td>
-                    <td data-label="Sun">
-                        <button class="ui icon button">
-                            <i class="check icon">
-                            </i>
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="four wide column">
-    </div>
+    {% endfor %}
 </div>
+<div id="demo"></div>
+
 
 <!-- <script type='text/javascript'>
     function getDay() {
@@ -89,9 +54,69 @@
             if (j != getDay()) {
                 col.className = "disabled";
                 col.getElementsByTagName('div')[0].classList.add("disabled");
-            }else {
-                console.log(typeof(col));
+            } else {
+                console.log(typeof (col));
             };
         };
     };
 </script> -->
+<script>
+    function deleteHabit() {
+        return deleteQuestion("{{url_for('habits.ge')")
+    }
+</script>
+
+<!-- 
+setInterval(updateQuestion, 4000);
+
+    function updateQuestion() {
+        var questionElement = document.getElementById('question-text');
+        var questionText = "";
+        if (questionElement != null) {
+            questionText = btoa(questionElement.innerText);
+        }
+
+        return getQuestion("{{url_for('trivia.get_updates', trivia_id=data['trivia_id'])}}?question=" + questionText, formatQuestion);
+    }
+
+    function fetchQuestion() {
+        return getQuestion("{{url_for('trivia.new_question', trivia_id=data['trivia_id'])}}", formatQuestion);
+    }
+
+    function getQuestion(url, formatQuestion) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = () => {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                formatQuestion(JSON.parse(xhttp.responseText));
+            }
+        };
+        xhttp.open('GET', url);
+        xhttp.send();
+    }
+
+    formatQuestion = (response) => {
+        console.log(response);
+        var question = response['results'][0];
+        var questionElement = document.getElementById('question-div');
+        questionElement.innerHTML = "";
+        var questionText = document.createElement('p');
+        questionText.id = 'question-text'
+        questionText.appendChild(document.createTextNode(question['question']))
+        questionElement.appendChild(questionText);
+        if (question['type'] === 'multiple' || question['type'] === 'boolean') {
+            var incorrectAnswers = question['incorrect_answers']
+            var correctNumber = Math.floor(Math.random() * (incorrectAnswers.length + 1));
+            incorrectAnswers.splice(correctNumber, 0, question['correct_answer']);
+            var list = document.createElement('ol');
+            for (i = 0; i < incorrectAnswers.length; i++) {
+                var answer = document.createElement('li')
+                answer.className = "answer-incorrect"
+                if (i == correctNumber) {
+                    answer.className = "answer-correct"
+                }
+                answer.appendChild(document.createTextNode(question['incorrect_answers'][i]));
+                list.appendChild(answer);
+            }
+            questionElement.appendChild(list);
+        }
+    }; -->
