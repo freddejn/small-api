@@ -2,121 +2,134 @@
 
 <div class="ui text container">
     {% for habit in data['habits'] %}
-    <div class="ui horizontal section divider">{{habit['body']}}</div>
-    <div class="ui center aligned divided grid">
-        <div class="row">
-            <div id="current-day" class="ui middle aligned centered two wide computer four wide mobile column">
-                <button id="day-button-mon" class="ui focus tiny circular button">Mon</button>
-            </div>
-            <div class="ui middle aligned two wide computer four wide mobile column">
-                <button id="day-button-tues" class="ui tiny circular button">Tue</button>
-            </div>
-            <div class="ui middle aligned two wide computer four wide mobile column">
-                <button id="day-button-wen" class="ui tiny circular button">Wen</button>
-            </div>
-            <div class="ui middle aligned two wide computer four wide mobile column">
-                <button id="day-button-thu" class="ui tiny circular button">Thu</button>
-            </div>
-            <div class="ui middle aligned two wide computer four wide mobile column">
-                <button id="day-button-fir" class="ui tiny circular button">Fri</button>
-            </div>
-            <div class="ui middle aligned two wide computer four wide mobile column">
-                <button id="day-button-sat" class="ui tiny circular button">Sat</button>
-            </div>
-            <div class="ui middle aligned two wide computer four wide mobile column">
-                <button id="day-button-sun" class="ui tiny circular button">Sun</button>
-            </div>
-            <div class="ui middle aligned fluid two wide computer eight wide mobile column" id="delete-button-column">
-                <button class="ui small circular inverted red icon button" id="delete-button">
-                    <i class="x icon"></i>
-                </button>
+    <div id="{{habit['id']}}">
+        <div class="ui horizontal section inverted divider">{{habit['body']}}</div>
+        <div class="ui center aligned divided grid">
+            <div class="row">
+                <div id="current-day" class="ui middle aligned centered two wide computer four wide mobile column">
+                    <button id="day-button-mon" class="ui focus tiny circular button">Mon</button>
+                </div>
+                <div class="ui middle aligned two wide computer four wide mobile column">
+                    <button id="day-button-tues" class="ui tiny circular button">Tue</button>
+                </div>
+                <div class="ui middle aligned two wide computer four wide mobile column">
+                    <button id="day-button-wen" class="ui tiny circular button">Wen</button>
+                </div>
+                <div class="ui middle aligned two wide computer four wide mobile column">
+                    <button id="day-button-thu" class="ui tiny circular button">Thu</button>
+                </div>
+                <div class="ui middle aligned two wide computer four wide mobile column">
+                    <button id="day-button-fir" class="ui tiny circular button">Fri</button>
+                </div>
+                <div class="ui middle aligned two wide computer four wide mobile column">
+                    <button id="day-button-sat" class="ui tiny circular button">Sat</button>
+                </div>
+                <div class="ui middle aligned two wide computer four wide mobile column">
+                    <button id="day-button-sun" class="ui tiny circular button">Sun</button>
+                </div>
+                <div class="ui middle aligned fluid two wide computer eight wide mobile column"
+                    id="delete-button-column">
+                    <button onclick="deleteHabit('{{url_for("api.habits_one_habit", id=habit["id"])}}')"
+                        class="ui small circular inverted red icon button" id="delete-button">
+                        <i class="x icon"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     {% endfor %}
+    <div class="ui horizontal section inverted divider">Create New Habit</div>
+    <div class="ui center aligned grid">
+        <div class="row">
+            <i id="toggle-create-habit-button" onclick="toggleCreateHabitForm()" class="large angle down icon"></i>
+        </div>
+    </div>
+    <form id="create-habit-form" action="submit" onsubmit="return formSubmitted(event)" class="ui inverted form">
+        <div class="field required">
+            <label>Habit description</label>
+            <input type="text" name="body" placeholder="Habit Description"></input>
+        </div>
+        <div class="two fields">
+            <div class="required field">
+                <label>Repetitions per week</label>
+                <select name="repetition" class="ui dropdown tiny">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                </select>
+            </div>
+            <div class="ui field">
+                <label>Habit keywords</label>
+                <input name="keywords" type="text" placeholder="Keyword2,Keyword2"></input>
+            </div>
+        </div>
+        <input type="submit" class="ui submit button" value="Submit">Create Habit</input>
+        <input name="url" value="{{url_for('api.habits_habit')}}" type="hidden"></input>
+    </form>
 </div>
-<div id="demo"></div>
 
-
-<!-- <script type='text/javascript'>
-    function getDay() {
-        var now = new Date();
-        return now.getDay();
-    };
-
-    var numDays = 7
-    var now = new Date();
-    var table = document.getElementById("habits-table");
-
-    for (var i = 1, row; row = table.rows[i]; i++) {
-        var td = row.cells;
-        for (var j = 1, col; col = row.cells[j]; j++) {
-            if (j != getDay()) {
-                col.className = "disabled";
-                col.getElementsByTagName('div')[0].classList.add("disabled");
-            } else {
-                console.log(typeof (col));
-            };
-        };
-    };
-</script> -->
-<script>
-    function deleteHabit() {
-        return deleteQuestion("{{url_for('habits.ge')")
-    }
-</script>
-
-<!-- 
-setInterval(updateQuestion, 4000);
-
-    function updateQuestion() {
-        var questionElement = document.getElementById('question-text');
-        var questionText = "";
-        if (questionElement != null) {
-            questionText = btoa(questionElement.innerText);
-        }
-
-        return getQuestion("{{url_for('trivia.get_updates', trivia_id=data['trivia_id'])}}?question=" + questionText, formatQuestion);
+<script type='text/javascript'>
+    function deleteHabit(url) {
+        return makeDeleteRequest(url, refreshHabitListAfterDelete);
     }
 
-    function fetchQuestion() {
-        return getQuestion("{{url_for('trivia.new_question', trivia_id=data['trivia_id'])}}", formatQuestion);
-    }
-
-    function getQuestion(url, formatQuestion) {
+    function makeDeleteRequest(url, refreshHabitListAfterDelete) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = () => {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
-                formatQuestion(JSON.parse(xhttp.responseText));
+                refreshHabitListAfterDelete(JSON.parse(xhttp.responseText));
             }
         };
-        xhttp.open('GET', url);
+        xhttp.open('DELETE', url);
         xhttp.send();
     }
 
-    formatQuestion = (response) => {
-        console.log(response);
-        var question = response['results'][0];
-        var questionElement = document.getElementById('question-div');
-        questionElement.innerHTML = "";
-        var questionText = document.createElement('p');
-        questionText.id = 'question-text'
-        questionText.appendChild(document.createTextNode(question['question']))
-        questionElement.appendChild(questionText);
-        if (question['type'] === 'multiple' || question['type'] === 'boolean') {
-            var incorrectAnswers = question['incorrect_answers']
-            var correctNumber = Math.floor(Math.random() * (incorrectAnswers.length + 1));
-            incorrectAnswers.splice(correctNumber, 0, question['correct_answer']);
-            var list = document.createElement('ol');
-            for (i = 0; i < incorrectAnswers.length; i++) {
-                var answer = document.createElement('li')
-                answer.className = "answer-incorrect"
-                if (i == correctNumber) {
-                    answer.className = "answer-correct"
-                }
-                answer.appendChild(document.createTextNode(question['incorrect_answers'][i]));
-                list.appendChild(answer);
+    refreshHabitListAfterDelete = (response) => {
+        document.getElementById(response['id']).remove()
+    };
+
+    function toggleCreateHabitForm() {
+        var createHabitForm = document.getElementById('create-habit-form');
+        createHabitForm.classList.toggle('visible');
+        var toggleCreateHabitButton = document.getElementById('toggle-create-habit-button');
+        toggleCreateHabitButton.classList.toggle('up');
+        toggleCreateHabitButton.classList.toggle('down');
+    }
+
+    // document.getElementById('create-habit-form').addEventListener('submit', formSubmitted)
+
+    function formSubmitted(e) {
+        e.preventDefault();
+        var form = document.getElementById('create-habit-form');
+        var data = new FormData(form);
+        var url = data.get('url')
+        data.set('keywords', [])
+        data.delete('url')
+        createHabit(url, JSON.stringify(Object.fromEntries(data)));
+    }
+
+    function createHabit(url, data) {
+        return makeCreateRequest(url, data, refreshHabitListAfterCreate);
+    }
+
+    function makeCreateRequest(url, data, refreshHabitListAfterCreate) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = () => {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                refreshHabitListAfterCreate(JSON.parse(xhttp.responseText));
             }
-            questionElement.appendChild(list);
-        }
-    }; -->
+        };
+        xhttp.open('POST', url, true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(data);
+    }
+
+    refreshHabitListAfterCreate = (response) => {
+        console.log(response);
+    }
+
+</script>

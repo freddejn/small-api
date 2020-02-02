@@ -23,6 +23,8 @@ class HabitModel(Common):
         return obj
 
     def store_habit(self, habit):
+        if habit is None:
+            return {}, 204
         db = firestore.Client()
         res = db.collection(u'habits').document()
         res.set(habit)
@@ -59,7 +61,7 @@ class HabitModel(Common):
         self.delete_all_documents(collection_ref=completed_habits_ref, data=[])
         habit_ref = db.collection(u'habits').document(id)
         res = habit_ref.delete()
-        return {'deleted': res.ToJsonString()}
+        return {'deleted': res.ToJsonString(), 'id': id}
 
 
 class CompletedHabitModel(Common):

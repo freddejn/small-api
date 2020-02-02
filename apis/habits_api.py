@@ -36,6 +36,7 @@ class Habit(Resource):
     @api.response(200, 'Success', habit_response)
     def post(self):
         habit = api.payload
+        print(habit)
         habit = hm.store_habit(habit)
         return habit
 
@@ -88,6 +89,7 @@ class CompleteHabits(Resource):
 
 @api.route('/<string:habit_id>/completed/<string:date_completed>')
 class CompletedHabit(Resource):
+    method_decorators = [authorize_decorator]
 
     @api.response(200, 'Success', completed_habit)
     def post(self, habit_id, date_completed=None):

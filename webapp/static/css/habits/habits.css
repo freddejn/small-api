@@ -33,3 +33,15 @@
 
 #current-day {
 }
+
+#toggle-habit-button {
+    cursor: pointer;
+}
+
+#create-habit-form.visible{
+    display: block;
+}
+
+#create-habit-form{
+    display: none;
+}
