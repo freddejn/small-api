@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+{% block header %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>404</title>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet", type="text/css", href="/static/css/style.css"></link>
+    <link rel='icon' href='/static/images/favicon.png' type='image/x-icon'/ >
+</head>
+{% endblock %}
+
+<body>
+    <h1>404: something went wrong: </h1>
+    <p>{{data['error']}}</p>
+</body>
+
+</html>

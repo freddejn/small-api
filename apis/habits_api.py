@@ -1,4 +1,5 @@
 from flask_restplus import Namespace, Resource, fields
+from flask import request
 from models.habits import HabitModel, CompletedHabitModel
 
 from models.authorization import authorize_decorator
@@ -36,7 +37,6 @@ class Habit(Resource):
     @api.response(200, 'Success', habit_response)
     def post(self):
         habit = api.payload
-        print(habit)
         habit = hm.store_habit(habit)
         return habit
 
@@ -76,7 +76,16 @@ class CompleteHabits(Resource):
 
     @api.response(200, 'Success', completed_habit)
     def get(self, habit_id):
-        completed = chm.get_completed_habits(habit_id)
+        try:
+            start_date = int(request.args.get('start'))
+        except TypeError:
+            start_date = None
+        try:
+            end_date = int(request.args.get('end'))
+        except TypeError:
+            end_date = None
+        completed = chm.get_completed_habits(
+            habit_id, start=start_date, end=end_date)
         if not completed:
             return {}, 404
         return completed
@@ -100,3 +109,11 @@ class CompletedHabit(Resource):
         if completed_habit is None:
             return {}, 404
         return completed_habit, 200
+
+    @api.response(200, 'Success')
+    def delete(self, habit_id, date_completed):
+        correct_date_format, error = chm.correct_date_format(date_completed)
+        if not correct_date_format:
+            return {'error': error}
+        deleted_habit = chm.delete_completed_habit(habit_id, date_completed)
+        return deleted_habit

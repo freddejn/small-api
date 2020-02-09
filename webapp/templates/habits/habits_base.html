@@ -2,6 +2,9 @@
 {% block header %}
 {{super()}}
 <link rel="stylesheet", type="text/css", href="/static/css/habits/habits.css"></link>
+<audio id="sounds">
+    <source src="/static/sounds/click.wav" type="audio/wav"></audio>
+</audio>
 {% endblock %}
 {% block content %}
 {%include 'habits/habits_startpage.html' %}

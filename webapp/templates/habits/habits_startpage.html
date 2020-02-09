@@ -1,32 +1,37 @@
 <div class="ui hidden section divider"></div>
+<div class="ui center aligned divided grid">
+
+    <h3>
+        <i id="previous-week" onclick="" class="large angle left icon">
+        </i>{{data['week'][0]}} - {{data['week'][1]}}
+        <i id="next-week" onclick="" class="large angle right icon"></i>
+    </h3>
+
+</div>
+<div class="ui horizontal section inverted divider"></div>
+
 
 <div class="ui text container">
     {% for habit in data['habits'] %}
     <div id="{{habit['id']}}">
         <div class="ui horizontal section inverted divider">{{habit['body']}}</div>
         <div class="ui center aligned divided grid">
-            <div class="row">
-                <div id="current-day" class="ui middle aligned centered two wide computer four wide mobile column">
-                    <button id="day-button-mon" class="ui focus tiny circular button">Mon</button>
-                </div>
+            <div class="row" data-id="{{habit['id']}}"
+                data-delete="{{url_for('api.habits_completed_habit', habit_id=habit['id'], date_completed='') }}"
+                data-url="{{url_for('api.habits_complete_habits', habit_id=habit['id']) }}">
+                {% for day in data['days'] %}
+                {%if habit['completed'][loop.index -1 ]['id'] is not none %}
                 <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button id="day-button-tues" class="ui tiny circular button">Tue</button>
+                    <button onclick='completeHabitButtonPressed("{{day}}", this)'
+                        class="ui focus tiny circular button positive {{day}}">{{day}}</button>
                 </div>
+                {% else %}
                 <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button id="day-button-wen" class="ui tiny circular button">Wen</button>
+                    <button onclick='completeHabitButtonPressed("{{day}}", this)'
+                        class="ui focus tiny circular button {{day}}">{{day}}</button>
                 </div>
-                <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button id="day-button-thu" class="ui tiny circular button">Thu</button>
-                </div>
-                <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button id="day-button-fir" class="ui tiny circular button">Fri</button>
-                </div>
-                <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button id="day-button-sat" class="ui tiny circular button">Sat</button>
-                </div>
-                <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button id="day-button-sun" class="ui tiny circular button">Sun</button>
-                </div>
+                {% endif %}
+                {% endfor %}
                 <div class="ui middle aligned fluid two wide computer eight wide mobile column"
                     id="delete-button-column">
                     <button onclick="deleteHabit('{{url_for("api.habits_one_habit", id=habit["id"])}}')"
@@ -41,10 +46,10 @@
     <div class="ui horizontal section inverted divider">Create New Habit</div>
     <div class="ui center aligned grid">
         <div class="row">
-            <i id="toggle-create-habit-button" onclick="toggleCreateHabitForm()" class="large angle down icon"></i>
+            <i id="toggle-create-habit-button" onclick="toggleCreateHabitForm();" class="large angle down icon"></i>
         </div>
     </div>
-    <form id="create-habit-form" action="submit" onsubmit="return formSubmitted(event)" class="ui inverted form">
+    <form id="create-habit-form" class="ui form inverted">
         <div class="field required">
             <label>Habit description</label>
             <input type="text" name="body" placeholder="Habit Description"></input>
@@ -67,69 +72,10 @@
                 <input name="keywords" type="text" placeholder="Keyword2,Keyword2"></input>
             </div>
         </div>
-        <input type="submit" class="ui submit button" value="Submit">Create Habit</input>
+        <button type="submit" class="ui submit button">Create Habit</button>
         <input name="url" value="{{url_for('api.habits_habit')}}" type="hidden"></input>
     </form>
 </div>
 
-<script type='text/javascript'>
-    function deleteHabit(url) {
-        return makeDeleteRequest(url, refreshHabitListAfterDelete);
-    }
-
-    function makeDeleteRequest(url, refreshHabitListAfterDelete) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = () => {
-            if (xhttp.readyState == 4 && xhttp.status == 200) {
-                refreshHabitListAfterDelete(JSON.parse(xhttp.responseText));
-            }
-        };
-        xhttp.open('DELETE', url);
-        xhttp.send();
-    }
-
-    refreshHabitListAfterDelete = (response) => {
-        document.getElementById(response['id']).remove()
-    };
-
-    function toggleCreateHabitForm() {
-        var createHabitForm = document.getElementById('create-habit-form');
-        createHabitForm.classList.toggle('visible');
-        var toggleCreateHabitButton = document.getElementById('toggle-create-habit-button');
-        toggleCreateHabitButton.classList.toggle('up');
-        toggleCreateHabitButton.classList.toggle('down');
-    }
-
-    // document.getElementById('create-habit-form').addEventListener('submit', formSubmitted)
-
-    function formSubmitted(e) {
-        e.preventDefault();
-        var form = document.getElementById('create-habit-form');
-        var data = new FormData(form);
-        var url = data.get('url')
-        data.set('keywords', [])
-        data.delete('url')
-        createHabit(url, JSON.stringify(Object.fromEntries(data)));
-    }
-
-    function createHabit(url, data) {
-        return makeCreateRequest(url, data, refreshHabitListAfterCreate);
-    }
-
-    function makeCreateRequest(url, data, refreshHabitListAfterCreate) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = () => {
-            if (xhttp.readyState == 4 && xhttp.status == 200) {
-                refreshHabitListAfterCreate(JSON.parse(xhttp.responseText));
-            }
-        };
-        xhttp.open('POST', url, true);
-        xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.send(data);
-    }
-
-    refreshHabitListAfterCreate = (response) => {
-        console.log(response);
-    }
-
+<script src='/static/js/habits.js' type='text/javascript'>
 </script>
