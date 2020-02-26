@@ -2,16 +2,15 @@
 <div class="ui center aligned divided grid">
 
     <h3>
-        <i id="previous-week" onclick="" class="large angle left icon">
-        </i>{{data['week'][0]}} - {{data['week'][1]}}
-        <i id="next-week" onclick="" class="large angle right icon"></i>
+        <a id="previous-week-url" href="{{url_for('habits.habits_startpage')}}"><i data-weekstart="{{data['week'][0]}}" id="previous-week" onclick="previousWeek()" class="large angle left icon"></i></a>
+        {{data['week'][0]}} - {{data['week'][6]}}
+        <a id="next-week-url" href="{{url_for('habits.habits_startpage')}}" ><i id="next-week" onclick="nextWeek()" class="large angle right icon"></i></a>
     </h3>
 
 </div>
 <div class="ui horizontal section inverted divider"></div>
-
-
 <div class="ui text container">
+    {% set ns = namespace(positive="positive")%}
     {% for habit in data['habits'] %}
     <div id="{{habit['id']}}">
         <div class="ui horizontal section inverted divider">{{habit['body']}}</div>
@@ -21,16 +20,14 @@
                 data-url="{{url_for('api.habits_complete_habits', habit_id=habit['id']) }}">
                 {% for day in data['days'] %}
                 {%if habit['completed'][loop.index -1 ]['id'] is not none %}
-                <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button onclick='completeHabitButtonPressed("{{day}}", this)'
-                        class="ui focus tiny circular button positive {{day}}">{{day}}</button>
-                </div>
+                {% set ns.positive = "positive"%}
                 {% else %}
-                <div class="ui middle aligned two wide computer four wide mobile column">
-                    <button onclick='completeHabitButtonPressed("{{day}}", this)'
-                        class="ui focus tiny circular button {{day}}">{{day}}</button>
-                </div>
+                {% set ns.positive = ""%}
                 {% endif %}
+                <div class="ui middle aligned two wide computer four wide mobile column">
+                    <button data-day="{{loop.index}}" onclick='completeHabitButtonPressed(this)'
+                        class="ui focus tiny circular button {{ns.positive}} {{day}}">{{day}}</button>
+                </div>
                 {% endfor %}
                 <div class="ui middle aligned fluid two wide computer eight wide mobile column"
                     id="delete-button-column">

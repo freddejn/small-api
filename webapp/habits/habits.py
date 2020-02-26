@@ -79,6 +79,5 @@ def habits_startpage(date):
                 completed_habits.append({'id': None})
         habit['completed'] = completed_habits
     data['habits'] = habits
-    print(data)
     return render_template('habits/habits_base.html',
                            title='Habits', data=data)

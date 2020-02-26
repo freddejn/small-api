@@ -1,4 +1,3 @@
-
 var days = ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun',];
 
 function deleteHabit(url) {
@@ -28,11 +27,8 @@ function toggleCreateHabitForm() {
     toggleCreateHabitButton.classList.toggle('down');
 }
 
-// document.getElementById('create-habit-form').addEventListener('submit', formSubmitted)
-
 function formSubmitted(e) {
     e.preventDefault();
-    console.log('running');
     var form = document.getElementById('create-habit-form');
     var data = new FormData(form);
     var url = data.get('url')
@@ -59,6 +55,7 @@ function makeCreateRequest(url, data, refreshHabitListAfterCreate) {
 
 refreshHabitListAfterCreate = (response) => {
     console.log(response);
+    location.reload();
 }
 
 function initForm() {
@@ -85,19 +82,29 @@ function initForm() {
     });
 }
 
+// TODO: Rewrite this to account for other weeks.
 function setToday() {
+    var startOfWeek = document.getElementById('previous-week').dataset.weekstart;
+    var startDate = getDateFromStartWeek(startOfWeek);
+    var endDate = addDaysToDate(startDate, 6);
     var d = new Date();
-    var today = days[d.getDay()];
-    var todayButtons = document.querySelectorAll('button.' + today);
-    for (var x = 0; x < todayButtons.length; x++) {
-        todayButtons[x].classList.toggle('current-day');
+    if (startDate <= d && d <= endDate) {
+        var todayInt = (d.getDay() == 0 ? 6: d.getDay() -1)
+        var today = days[todayInt];
+        var todayButtons = document.querySelectorAll('button.' + today);
+        for (var i = 0; i < todayButtons.length; i++) {
+            todayButtons[i].classList.toggle('current-day');
+        }
     }
 }
 
-function completeHabitButtonPressed(day, element) {
-    var date = getDateFromDay(day);
-    console.log(date);
-    url = element.parentNode.parentNode.dataset.delete + date;
+function completeHabitButtonPressed(element) {
+    var indexOfPressed = element.dataset.day
+    var startOfWeek = document.getElementById('previous-week').dataset.weekstart;
+    var startOfWeekDate = getDateFromStartWeek(startOfWeek);
+    var datePressed = addDaysToDate(startOfWeekDate, indexOfPressed - 1);
+    datePressed = formatDate(datePressed);
+    url = element.parentNode.parentNode.dataset.delete + datePressed;
     var sound = new Audio('/static/sounds/click.wav')
     sound.play();
     var buttonOn = element.classList.contains('positive')
@@ -107,6 +114,37 @@ function completeHabitButtonPressed(day, element) {
     } else {
         completeHabitRequest(url, element);
     }
+}
+
+function getDateFromStartWeek(startOfWeekDate) {
+    var y = startOfWeekDate.substr(0, 4);
+    var m = startOfWeekDate.substr(4, 2) - 1;
+    var d = startOfWeekDate.substr(6, 2);
+    var tDate = new Date(y, m, d);
+    return tDate;
+}
+
+function addDaysToDate(date, dayNum) {
+    Date.prototype.addDays = function (daysToAdd) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + daysToAdd)
+        return date
+    }
+    return date.addDays(dayNum);
+}
+
+function formatDate(date) {
+    var dd = date.getDate();
+    var mm = date.getMonth() + 1;
+    var yy = date.getFullYear();
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    var formattedDate = [yy, mm, dd].join('')
+    return formattedDate;
 }
 
 function completeHabitRequest(url, element) {
@@ -125,33 +163,34 @@ function refreshCompletedHabitsListAfterUpdate(element) {
     element.classList.toggle('positive');
 }
 
-function getDateFromDay(day) {
-    Date.prototype.addDays = function (daysToAdd) {
-        var date = new Date(this.valueOf());
-        date.setDate(date.getDate() + daysToAdd)
-        return date
-    }
-    var todayAsNum = new Date().getDay();
-    var todayAsNum = (todayAsNum == 0 ? 6 : todayAsNum - 1);
-    console.log(todayAsNum);
-    var selectedDayAsNum = days.indexOf(day);
-    var daysToAdd = selectedDayAsNum - todayAsNum;
-    var tNewDate = new Date();
-    var newDate = tNewDate.addDays(daysToAdd);
-    var dd = newDate.getDate();
-    var mm = newDate.getMonth() + 1;
-    var yy = newDate.getFullYear();
-    if (mm < 10) {
-        mm = '0' + mm;
-    }
-    if (dd < 10) {
-        dd = '0' + dd;
-    }
-    var formattedDate = [yy, mm, dd].join('')
-    return formattedDate;
+function previousWeek() {
+    var startOfWeek = document.getElementById('previous-week').dataset.weekstart;
+    var startOfWeekDate = getDateFromStartWeek(startOfWeek);
+    var date = addDaysToDate(startOfWeekDate, - 7);
+    date = formatDate(date);
+}
+
+function nextWeek() {
+    var startOfWeek = document.getElementById('previous-week').dataset.weekstart;
+    var startOfWeekDate = getDateFromStartWeek(startOfWeek);
+    var date = addDaysToDate(startOfWeekDate, + 7);
+    date = formatDate(date);
+}
+
+function initUrlForToggleWeek() {
+    var startOfWeek = document.getElementById('previous-week').dataset.weekstart;
+    var startOfWeekDate = getDateFromStartWeek(startOfWeek);
+    var previous = formatDate(addDaysToDate(startOfWeekDate, - 7));
+    var next = formatDate(addDaysToDate(startOfWeekDate, + 7));
+    var nextWeekUrl = document.getElementById('next-week-url').href;
+    var previousWeekUrl = document.getElementById('previous-week-url').href;
+    document.getElementById('next-week-url').href = nextWeekUrl + '/' + next;
+    document.getElementById('previous-week-url').href = previousWeekUrl + '/' + previous;
+
 }
 
 $(document).ready(function () {
     initForm();
     setToday();
+    initUrlForToggleWeek();
 });
