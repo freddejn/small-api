@@ -6,19 +6,14 @@
     width: 4em;
 }
 
-#habits-table {
-    margin: auto;
-    border: 3px solid rgb(212, 134, 82);
-}
-
 .ui.fluid.inverted.transparent.input {
     min-width: 50 px;
 }
 
-.ui.center.aligned.two.wide.computer.four.wide.mobile.column {
-    margin-top: 8px;
+.ui.middle.aligned.two.wide.computer.five.wide.mobile.column {
+ margin-top: 8px;
     margin-bottom: 8px;
-}
+} */
 
 .ui.button[id^="day-button"]{
     margin-top: 4px;

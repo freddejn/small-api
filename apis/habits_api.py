@@ -29,6 +29,10 @@ deleted = api.model('deleted', {
     'timestamp': fields.DateTime('Datetime of update in database')
 })
 
+updated = api.model('updated', {
+    'timestamp': fields.DateTime('Datetime of update in database')
+})
+
 
 @api.route('')
 class Habit(Resource):
@@ -61,6 +65,10 @@ class OneHabit(Resource):
         result = hm.delete_habit(id)
         return result
 
+    @api.response(200, 'Success', updated)
+    def post(self, id):
+        result = hm.update_habit(id)
+        return result
 
 @api.route('/<string:habit_id>/completed',
            doc={'habit_id': 'The id of the corresponding habit.'})

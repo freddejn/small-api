@@ -2,9 +2,16 @@
 <div class="ui center aligned divided grid">
 
     <h3>
-        <a id="previous-week-url" href="{{url_for('habits.habits_startpage')}}"><i data-weekstart="{{data['week'][0]}}" id="previous-week" onclick="previousWeek()" class="large angle left icon"></i></a>
+        <a id="previous-week-url" href="{{url_for('habits.habits_startpage')}}">
+            <i data-weekstart="{{data['week'][0]}}" id="previous-week" onclick="previousWeek()"
+                class="large angle left icon">
+            </i>
+        </a>
         {{data['week'][0]}} - {{data['week'][6]}}
-        <a id="next-week-url" href="{{url_for('habits.habits_startpage')}}" ><i id="next-week" onclick="nextWeek()" class="large angle right icon"></i></a>
+        <a id="next-week-url" href="{{url_for('habits.habits_startpage')}}">
+            <i id="next-week" onclick="nextWeek()" class="large angle right icon">
+            </i>
+        </a>
     </h3>
 
 </div>
@@ -24,16 +31,21 @@
                 {% else %}
                 {% set ns.positive = ""%}
                 {% endif %}
-                <div class="ui middle aligned two wide computer four wide mobile column">
+                <div class="ui middle aligned two wide computer five wide mobile column">
                     <button data-day="{{loop.index}}" onclick='completeHabitButtonPressed(this)'
                         class="ui focus tiny circular button {{ns.positive}} {{day}}">{{day}}</button>
                 </div>
                 {% endfor %}
-                <div class="ui middle aligned fluid two wide computer eight wide mobile column"
+                <div class="ui middle aligned fluid one wide computer five wide mobile column"
                     id="delete-button-column">
                     <button onclick="deleteHabit('{{url_for("api.habits_one_habit", id=habit["id"])}}')"
                         class="ui small circular inverted red icon button" id="delete-button">
                         <i class="x icon"></i>
+                    </button>
+                </div>
+                <div class="ui middle aligned fluid one wide computer five wide mobile column" id="edit-button-column">
+                    <button onclick='toggleCreateHabitForm({{habit|tojson}}, "{{url_for('api.habits_one_habit', id=habit['id'])}}")' class="ui small circular inverted blue icon button" id="edit-button">
+                        <i class="edit icon"></i>
                     </button>
                 </div>
             </div>
@@ -49,12 +61,12 @@
     <form id="create-habit-form" class="ui form inverted">
         <div class="field required">
             <label>Habit description</label>
-            <input type="text" name="body" placeholder="Habit Description"></input>
+            <input id="habit-form-body" type="text" name="body" placeholder="Habit Description"></input>
         </div>
         <div class="two fields">
             <div class="required field">
                 <label>Repetitions per week</label>
-                <select name="repetition" class="ui dropdown tiny">
+                <select id="habit-form-repetitions" name="repetition" class="ui dropdown tiny">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -66,11 +78,11 @@
             </div>
             <div class="ui field">
                 <label>Habit keywords</label>
-                <input name="keywords" type="text" placeholder="Keyword2,Keyword2"></input>
+                <input id="habit-form-keywords" name="keywords" type="text" placeholder="Keyword2,Keyword2" ></input>
             </div>
         </div>
-        <button type="submit" class="ui submit button">Create Habit</button>
-        <input name="url" value="{{url_for('api.habits_habit')}}" type="hidden"></input>
+        <button id="habit-form-button" type="submit" class="ui submit button">Create Habit</button>
+        <input id="habit-form-url" name="url" value="{{url_for('api.habits_habit')}}" type="hidden"></input>
     </form>
 </div>
 

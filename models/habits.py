@@ -63,6 +63,11 @@ class HabitModel(Common):
         res = habit_ref.delete()
         return {'deleted': res.ToJsonString(), 'id': id}
 
+    def update_habit(self, data):
+        db = firestore.Client()
+        habit_ref = db.collection(u'habits').document(u'{}'.format(data['id']))
+        habit_ref.set(data, merge=True)
+
 
 class CompletedHabitModel(Common):
     def store_completed_habit(self, habit_id, date_completed=None):

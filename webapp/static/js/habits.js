@@ -1,4 +1,4 @@
-var days = ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun',];
+var days = ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 function deleteHabit(url) {
     return makeDeleteRequest(url, refreshHabitListAfterDelete);
@@ -19,12 +19,33 @@ refreshHabitListAfterDelete = (response) => {
     document.getElementById(response['id']).remove()
 };
 
-function toggleCreateHabitForm() {
+function toggleCreateHabitForm(habit, url) {
     var createHabitForm = document.getElementById('create-habit-form');
-    createHabitForm.classList.toggle('visible');
     var toggleCreateHabitButton = document.getElementById('toggle-create-habit-button');
-    toggleCreateHabitButton.classList.toggle('up');
-    toggleCreateHabitButton.classList.toggle('down');
+    var keywords = document.getElementById('habit-form-keywords');
+    var body = document.getElementById('habit-form-body');
+    var repetitions = document.getElementById('habit-form-repetitions');
+    var submitButton = document.getElementById('habit-form-button');
+    if(!habit){
+        toggleCreateHabitButton.classList.toggle('up');
+        toggleCreateHabitButton.classList.toggle('down');
+        createHabitForm.classList.toggle('visible');
+        submitButton.innerHTML = "Create Habit";
+        keywords.value = "";
+        body.value = "";
+        for(i=0;i<repetitions.options.length;i++){
+            repetitions.options[i].selected = false;
+        }
+    }else{
+        createHabitForm.classList.add('visible');
+        toggleCreateHabitButton.classList.add('up');
+        toggleCreateHabitButton.classList.remove('down');
+        submitButton.innerHTML = "Update Habit";
+        keywords.value = habit['keywords'];
+        body.value = habit['body'];
+        repetitions.options[habit['repetition']- 1].selected = true;
+    }
+    window.scrollTo(0, document.body.scrollHeight);
 }
 
 function formSubmitted(e) {
@@ -54,7 +75,6 @@ function makeCreateRequest(url, data, refreshHabitListAfterCreate) {
 }
 
 refreshHabitListAfterCreate = (response) => {
-    console.log(response);
     location.reload();
 }
 
